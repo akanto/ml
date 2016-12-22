@@ -9,19 +9,40 @@ jar {
 configurations {
   all*.exclude group: 'org.bytedeco', module: 'javacpp-presets'
 }
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+buildscript {
+  repositories {
+    jcenter()
+  }
+
+  dependencies {
+    classpath 'eu.appsatori:gradle-fatjar-plugin:0.3'
+  }
+}
+
+apply plugin: 'eu.appsatori.fatjar'
+
+fatJar {
+  exclude 'META-INF/*.DSA'
+}
 
 repositories {
 	mavenCentral()
 }
 
-
 dependencies {
   compile "org.deeplearning4j:deeplearning4j-core:${deeplearning4jVersion}"
   compile "org.nd4j:nd4j-native-platform:${nd4jVersion}"
   compile "com.beust:jcommander:${jcommanderVersion}"
-  compile "org.deeplearning4j:dl4j-spark_${scalaBinaryVersion}:${deeplearning4jVersion}"
-  compile "org.apache.spark:spark-core_${scalaBinaryVersion}:${sparkVersion}"
+  compile "org.deeplearning4j:dl4j-spark_${scalaBinaryVersion}:${deeplearning4jVersion}",  {
+    exclude group: 'org.apache.spark'
+  }
+  compile "org.apache.spark:spark-core_${scalaBinaryVersion}:${sparkVersion}", {
+    ext {
+      fatJarExclude = true
+    }
+  }
 
 }

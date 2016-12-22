@@ -39,7 +39,7 @@ public class MnistSpark {
     private int batchSizePerWorker = 16;
 
     @Parameter(names = "-numEpochs", description = "Number of epochs for training")
-    private int numEpochs = 15;
+    private int numEpochs = 1;
 
     public static void main(String[] args) throws Exception {
         new MnistSpark().entryPoint(args);
