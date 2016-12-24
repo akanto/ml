@@ -1,11 +1,13 @@
 package com.akanto.ml.spark;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
+import org.apache.spark.storage.StorageLevel;
 import org.deeplearning4j.datasets.iterator.impl.MnistDataSetIterator;
 import org.deeplearning4j.eval.Evaluation;
 import org.deeplearning4j.nn.api.OptimizationAlgorithm;
@@ -33,13 +35,13 @@ public class MnistSpark {
     private static final Logger log = LoggerFactory.getLogger(MnistSpark.class);
 
     @Parameter(names = "-useSparkLocal", description = "Use spark local (helper for testing/running without spark submit)", arity = 1)
-    private boolean useSparkLocal = true;
+    private boolean useSparkLocal = false;
 
     @Parameter(names = "-batchSizePerWorker", description = "Number of examples to fit each worker with")
     private int batchSizePerWorker = 16;
 
     @Parameter(names = "-numEpochs", description = "Number of epochs for training")
-    private int numEpochs = 1;
+    private int numEpochs = 15;
 
     public static void main(String[] args) throws Exception {
         new MnistSpark().entryPoint(args);
@@ -67,22 +69,9 @@ public class MnistSpark {
         sparkConf.setAppName("DL4J Spark MLP Example");
         JavaSparkContext sc = new JavaSparkContext(sparkConf);
 
-        //Load the data into memory then parallelize
-        //This isn't a good approach in general - but is simple to use for this example
-        DataSetIterator iterTrain = new MnistDataSetIterator(batchSizePerWorker, true, 12345);
-        DataSetIterator iterTest = new MnistDataSetIterator(batchSizePerWorker, true, 12345);
-        List<DataSet> trainDataList = new ArrayList<>();
-        List<DataSet> testDataList = new ArrayList<>();
-        while (iterTrain.hasNext()) {
-            trainDataList.add(iterTrain.next());
-        }
-        while (iterTest.hasNext()) {
-            testDataList.add(iterTest.next());
-        }
+        JavaRDD<DataSet> trainData = loadDataSet(sc, true);
 
-        JavaRDD<DataSet> trainData = sc.parallelize(trainDataList);
-        JavaRDD<DataSet> testData = sc.parallelize(testDataList);
-
+        log.info("Partitions of train data: {}", trainData.partitions().size());
         log.info("***** Train *****");
 
         //----------------------------------
@@ -104,12 +93,12 @@ public class MnistSpark {
                 .build();
 
 
-
         //Configuration for Spark training: see http://deeplearning4j.org/spark for explanation of these configuration options
         TrainingMaster tm = new ParameterAveragingTrainingMaster.Builder(batchSizePerWorker)    //Each DataSet object: contains (by default) 32 examples
                 .averagingFrequency(5)
                 .workerPrefetchNumBatches(2)            //Async prefetching: 2 examples per worker
                 .batchSizePerWorker(batchSizePerWorker)
+                .storageLevel(StorageLevel.MEMORY_ONLY())
                 .build();
 
         //Create the Spark network
@@ -121,14 +110,31 @@ public class MnistSpark {
             log.info("Completed Epoch {}", i);
         }
 
+        trainData.unpersist();
+        log.info("***** Evaluation *****");
+
+        JavaRDD<DataSet> testData = loadDataSet(sc, false);
+        log.info("Partitions of train data: {}", testData.partitions().size());
         //Perform evaluation (distributed)
         Evaluation evaluation = sparkNet.evaluate(testData);
-        log.info("***** Evaluation *****");
         log.info(evaluation.stats());
 
         //Delete the temp training files, now that we are done with them
         tm.deleteTempFiles(sc);
 
         log.info("***** Example Complete *****");
+    }
+
+    private JavaRDD<DataSet> loadDataSet(JavaSparkContext sc, boolean train) throws IOException {
+        //Load the data into memory then parallelize
+        //This isn't a good approach in general - but is simple to use for this example
+
+        DataSetIterator iterTrain = new MnistDataSetIterator(batchSizePerWorker, train, 12345);
+        List<DataSet> ds = new ArrayList<>();
+        while (iterTrain.hasNext()) {
+            ds.add(iterTrain.next());
+        }
+        log.info("Loaded dataset size: {}, train: {}", ds.size(), train);
+        return sc.parallelize(ds);
     }
 }
