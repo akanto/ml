@@ -30,6 +30,9 @@ import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 
+/**
+ * Based on https://github.com/deeplearning4j/dl4j-examples/blob/master/dl4j-spark-examples/dl4j-spark/src/main/java/org/deeplearning4j/mlp/MnistMLPExample.java
+ */
 public class MnistSpark {
 
     private static final Logger log = LoggerFactory.getLogger(MnistSpark.class);
@@ -98,7 +101,7 @@ public class MnistSpark {
                 .averagingFrequency(5)
                 .workerPrefetchNumBatches(2)            //Async prefetching: 2 examples per worker
                 .batchSizePerWorker(batchSizePerWorker)
-                .storageLevel(StorageLevel.MEMORY_ONLY())
+                .storageLevel(StorageLevel.MEMORY_ONLY_SER())
                 .build();
 
         //Create the Spark network
