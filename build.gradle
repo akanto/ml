@@ -1,5 +1,8 @@
 apply plugin: 'java'
 apply plugin: 'eclipse'
+apply plugin: 'application'
+
+mainClassName = "com.akanto.ml.spark.MnistSpark"
 
 task wrapper(type: Wrapper) {
   gradleVersion = '2.8'

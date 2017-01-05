@@ -20,7 +20,7 @@ public class HelloSpark {
         log.info("****************** Start hello Spark ******************");
         SparkConf sparkConf = new SparkConf();
 
-        //sparkConf.setMaster("local[*]");
+        sparkConf.setMaster("local[*]");
 
         sparkConf.setAppName("My Pi Example");
         JavaSparkContext sc = new JavaSparkContext(sparkConf);

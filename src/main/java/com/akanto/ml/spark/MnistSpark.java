@@ -38,13 +38,13 @@ public class MnistSpark {
     private static final Logger log = LoggerFactory.getLogger(MnistSpark.class);
 
     @Parameter(names = "-useSparkLocal", description = "Use spark local (helper for testing/running without spark submit)", arity = 1)
-    private boolean useSparkLocal = false;
+    private boolean useSparkLocal = true;
 
     @Parameter(names = "-batchSizePerWorker", description = "Number of examples to fit each worker with")
     private int batchSizePerWorker = 16;
 
     @Parameter(names = "-numEpochs", description = "Number of epochs for training")
-    private int numEpochs = 15;
+    private int numEpochs = 1;
 
     public static void main(String[] args) throws Exception {
         new MnistSpark().entryPoint(args);
