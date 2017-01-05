@@ -6,6 +6,6 @@ install_gpu_packages:
   pkg.installed:
     - pkgs:
       - nvidia
-      - cudatoolkit
+      - cuda
 
-# salt 'hostgroup:worker' state.apply gpu
+# salt -G 'hostgroup:worker' state.apply gpu
