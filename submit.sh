@@ -11,6 +11,7 @@ cd ml
 cd /usr/hdp/current/spark-client
 time ./bin/spark-submit --class com.akanto.ml.spark.MnistSpark --master yarn-client --num-executors 3 --driver-memory 2048m --executor-memory 1224m --executor-cores 1 --conf spark.yarn.driver.memoryOverhead=1024 --conf "spark.executor.extraJavaOptions=-Dorg.bytedeco.javacpp.maxbytes=750000000"  --conf "spark.driver.extraJavaOptions=-Dorg.bytedeco.javacpp.maxbytes=1000000000" --conf spark.yarn.executor.memoryOverhead=1024 /home/spark/ml/build/libs/ml.jar
 
+# nvidia-smi -l 1
 
 #./bin/spark-submit --class com.akanto.ml.spark.HelloSpark --master yarn-client --num-executors 8 --driver-memory 512m --executor-memory 512m --executor-cores 1 /tmp/ml-0.0.1-SNAPSHOT.jar
 
