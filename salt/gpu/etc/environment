@@ -1,2 +1,2 @@
 HADOOP_CLASSPATH=$HADOOP_CLASSPATH:/usr/lib/hadoop/lib/*
-PATH=/opt/nvidia/cuda/bin
+PATH=/opt/nvidia/cuda/bin:/bin:/usr/bin
