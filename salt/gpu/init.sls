@@ -8,4 +8,8 @@ install_gpu_packages:
       - nvidia
       - cuda
 
-# salt -G 'hostgroup:worker' state.apply gpu
+/etc/environment:
+  file.managed:
+    - source: salt://gpu/etc/environment
+
+# salt -G 'hostgroup:master' state.apply gpu
