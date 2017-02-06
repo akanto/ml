@@ -16,7 +16,7 @@ retries=5
 timeout=10
 EOF
   yum -y install nvidia cuda
-  yum -y update 
+  #yum -y update 
 }
 
 update_path() {
