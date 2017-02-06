@@ -24,9 +24,19 @@ update_path() {
   echo CUDA_HOME=/opt/nvidia/cuda >> /etc/environment 
 }
 
+load_driver() {
+  modprobe nvidia
+  modprobe nvidia_uvm
+  lsmod | grep nv
+  nvidia-smi -q
+  ldconfig /etc/ld.so.conf.d/cuda.conf
+  ldconfig -p | grep cublas
+}
+
 main() {
     install_drivers
     update_path
+    load_driver
 }
 
 [[ "$0" == "$BASH_SOURCE" ]] && main "$@"
