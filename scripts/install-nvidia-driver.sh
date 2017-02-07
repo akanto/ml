@@ -20,7 +20,7 @@ EOF
 }
 
 update_path() {
-  echo PATH=/opt/nvidia/cuda/bin:/bin:/usr/bin > /etc/environment
+  echo PATH=/opt/nvidia/cuda/bin:/bin:/usr/bin >> /etc/environment
   echo CUDA_HOME=/opt/nvidia/cuda >> /etc/environment 
 }
 
