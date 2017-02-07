@@ -9,7 +9,7 @@ submit_app() {
 }
 
 main() {
-    buid_app
+    #buid_app
     submit_app
 }
 

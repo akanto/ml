@@ -25,10 +25,10 @@ update_path() {
 }
 
 load_and_test_driver() {
-  modprobe nvidia
-  modprobe nvidia_uvm
-  lsmod | grep nv
-  nvidia-smi -q
+  #modprobe nvidia
+  #modprobe nvidia_uvm
+  #lsmod | grep nv
+  #nvidia-smi -q
   ldconfig /etc/ld.so.conf.d/cuda.conf
   ldconfig -p | grep cublas
 }
