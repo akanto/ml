@@ -16,7 +16,7 @@ retries=5
 timeout=10
 EOF
   yum -y install nvidia cuda
-  #yum -y update 
+  yum -y update
 }
 
 update_path() {
@@ -28,7 +28,7 @@ load_and_test_driver() {
   #modprobe nvidia
   #modprobe nvidia_uvm
   #lsmod | grep nv
-  #nvidia-smi -q
+  nvidia-smi -q
   ldconfig /etc/ld.so.conf.d/cuda.conf
   ldconfig -p | grep cublas
 }
