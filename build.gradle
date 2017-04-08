@@ -16,8 +16,8 @@ jar {
 configurations {
   all*.exclude group: 'org.bytedeco', module: 'javacpp-presets'
 }
-sourceCompatibility = 1.7
-targetCompatibility = 1.7
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 buildscript {
   repositories {
