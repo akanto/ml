@@ -18,9 +18,8 @@ public class HelloSpark {
     public static void main(String[] args) throws Exception {
 
         log.info("****************** Start hello Spark ******************");
-        SparkConf sparkConf = new SparkConf();
+        SparkConf sparkConf = new SparkConf().setMaster("local[*]");
 
-        sparkConf.setMaster("local[*]");
 
         sparkConf.setAppName("My Pi Example");
         JavaSparkContext sc = new JavaSparkContext(sparkConf);

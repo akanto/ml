@@ -1,0 +1,59 @@
+{
+  "ClusterName": "test-dl4j",
+  "HDPVersion": "2.6",
+  "ClusterType": "Data Science: Apache Spark 1.6, Apache Zeppelin 0.7.0",
+  "Master": {
+    "InstanceType": "g2.2xlarge",
+    "VolumeType": "ephemeral",
+    "VolumeSize": 60,
+    "VolumeCount": 1,
+    "RecoveryMode": "MANUAL",
+    "Recipes": [
+      {
+        "URI": "https://raw.githubusercontent.com/akanto/ml/hcc-cuda-blog/scripts/install-nvidia-driver.sh",
+        "Phase": "post"
+      },
+      {
+        "URI": "https://raw.githubusercontent.com/akanto/ml/hcc-cuda-blog/scripts/ka-mnist.sh",
+        "Phase": "post"
+      }
+    ]
+  },
+  "Worker": {
+    "InstanceType": "g2.2xlarge",
+    "VolumeType": "ephemeral",
+    "VolumeSize": 60,
+    "VolumeCount": 1,
+    "InstanceCount": 3,
+    "RecoveryMode": "AUTO",
+    "Recipes": [
+      {
+        "URI": "https://raw.githubusercontent.com/akanto/ml/hcc-cuda-blog/scripts/install-nvidia-driver.sh",
+        "Phase": "post"
+      }
+    ]
+  },
+  "Compute": {
+    "InstanceType": "g2.2xlarge",
+    "VolumeType": "ephemeral",
+    "VolumeSize": 60,
+    "VolumeCount": 1,
+    "InstanceCount": 0,
+    "RecoveryMode": "AUTO",
+    "Recipes": [
+      {
+        "URI": "https://raw.githubusercontent.com/akanto/ml/hcc-cuda-blog/scripts/install-nvidia-driver.sh",
+        "Phase": "post"
+      }
+    ]
+  },
+  "SSHKeyName": "REPLACE-WITH-YOUR-KEY",
+  "RemoteAccess": "0.0.0.0/0",
+  "WebAccess": true,
+  "HiveJDBCAccess": true,
+  "ClusterComponentAccess": true,
+  "ClusterAndAmbariUser": "admin",
+  "ClusterAndAmbariPassword": "admin",
+  "InstanceRole": "CREATE"
+}
+
